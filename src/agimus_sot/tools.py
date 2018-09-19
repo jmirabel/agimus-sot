@@ -725,7 +725,8 @@ class COM (Manifold):
                         "hppcom": comname,
                         "signalGetters": [ self._signalVelocityRef ] },
                     })
-        self.taskCom.task.controlGain.value = 5
+        self.taskCom.task.controlGain.value = 10
+        #setGain(self.taskCom.gain,(4.9,0.5,0.01,0.9))
 
     def _signalPositionRef (self): return self.taskCom.featureDes.errorIN
     def _signalVelocityRef (self): return self.taskCom.featureDes.errordotIN

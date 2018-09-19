@@ -121,16 +121,18 @@ class TaskFactory(ConstraintFactoryAbstract):
         handle  = gf.handleFrames [h]
 
         gripper_close = self._buildGripper ("close", g, h)
-        pregrasp = PreGrasp (gripper, handle, otherGrasp)
-        pregrasp.makeTasks (gf.sotrobot, gf.parameters["useMeasurementOfObjectsPose"])
+        #pregrasp = PreGrasp (gripper, handle, otherGrasp)
+        #pregrasp.makeTasks (gf.sotrobot, gf.parameters["useMeasurementOfObjectsPose"])
+        pregrasp = Manifold ()
 
         if not gripper.enabled:
             # TODO If otherGrasp is not None,
             # we should include the grasp function of otherGrasp, not pregrasp function...
             grasp = Manifold()
         else:
-            grasp = Grasp (gripper, handle, otherGrasp)
-            grasp.makeTasks (gf.sotrobot)
+            #grasp = Grasp (gripper, handle, otherGrasp)
+            #grasp.makeTasks (gf.sotrobot)
+            grasp = Manifold()
         return { 'grasp': grasp,
                  'pregrasp': pregrasp,
                  'gripper_close': gripper_close }
