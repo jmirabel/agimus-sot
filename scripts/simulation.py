@@ -39,6 +39,7 @@ from tf2_msgs.msg import TFMessage
 from agimus_hpp.client import HppClient
 from agimus_hpp.tools import sotTransRPYToHppPose
 import hpp_idl
+from hpp.gepetto.manipulation.viewer_factory import ViewerFactory
 
 TalosSlicesReducedToFull = [slice(7, 28, 1), slice(33, 34, 1),
                             slice(35, 42, 1), slice(47, 48, 1),
@@ -157,6 +158,16 @@ class Simulation (object):
         # Create mapping from transition names to graph component id in HPP
         self.graphDict = createGraphDict (self.client)
 
+        self.client.robot.packageName = "talos_data"
+        self.client.robot.urdfName = "talos"
+        self.client.robot.urdfSuffix = "_full_v2"
+        self.client.robot.robotNames = ['talos', 'box', 'table']
+        vf = ViewerFactory (self.client.problemSolver)
+        try:
+            self.viewer = vf.createViewer(displayName="sim_talos")
+        except:
+            self.viewer = None
+
     def getRobotState (self, msg) :
         self.mutex.acquire()
         try:
@@ -194,6 +205,8 @@ class Simulation (object):
                   self.client.manip ().graph.applyEdgeLeafConstraints \
                   (self.transitionId, self.q_rhs, self.q)
                 self.q = list (self.q)
+                if self.viewer is not None:
+                    self.viewer (self.q)
                 for o in self.objects:
                     r = self.rankInConfiguration [o + '/root_joint']
                     self.objectPose [o] = self.q [r:r + 7]
