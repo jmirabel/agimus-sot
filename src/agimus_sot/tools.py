@@ -237,7 +237,7 @@ class Manifold(object):
 
     def addTfListenerTopic (self, topicName, frame0, frame1,
             defaultValue=None, signalGetters=frozenset(),
-            maxDelay=0.3):
+            maxDelay=1.5):
         if topicName in self.topics:
             tp=self.topics[topicName]
             assert "velocity" in tp and tp['velocity'] ==  False
@@ -464,15 +464,16 @@ class PreGrasp (Manifold):
 
     def _createTaskAndGain (self, name):
         # Create a task
-        from dynamic_graph.sot.core import Task, GainAdaptive
+        from dynamic_graph.sot.core import Task
+        from agimus_sot.sot import SafeGainAdaptive
         self.task = Task (name + "_task")
         self.task.add (self.feature.name)
 
         # Set the task gain
-        self.gain = GainAdaptive(name + "_gain")
-        #setGain(self.gain,(4.9,0.9,0.01,0.9))
-        # When the error is big, we want the task to be almost not considered.
-        setGain(self.gain,(4.9,0.001,0.01,0.1))
+        self.gain = SafeGainAdaptive(name + "_gain")
+        # See doc of SafeGainAdaptive to see how to plot the gain associated
+        # to those values.
+        self.gain.computeParameters(5.,0.1,0.7,10.)
         plug(self.gain.gain, self.task.controlGain)
         plug(self.task.error, self.gain.error)
 

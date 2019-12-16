@@ -240,7 +240,7 @@ class TaskFactory(ConstraintFactoryAbstract):
                 useMeasOfEnvContact,
                 useMeasOfOtherGripper)
 
-        return { 'preplace': preplace }
+        return { 'preplace': Manifold() }
 
     ## \name Accessors to the different elementary constraints
     # \{
