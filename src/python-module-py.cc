@@ -1,15 +1,21 @@
 #include "dynamic-graph/python/module.hh"
 
 #include "time.hh"
+#include "delay.hh"
 #include "gain-adaptive.hh"
 #include "holonomic-constraint.hh"
-
-namespace dg = dynamicgraph;
+#include "task-smith-predictor.hh"
 
 BOOST_PYTHON_MODULE(wrap)
 {
+  using namespace dynamicgraph::agimus;
   bp::import("dynamic_graph");
-  dg::python::exposeEntity<dg::agimus::Time<int> >();
-  dg::python::exposeEntity<dg::agimus::SafeGainAdaptive>();
-  dg::python::exposeEntity<dg::agimus::HolonomicConstraint>();
+  dg::python::exposeEntity<Time<int> >();
+  dg::python::exposeEntity<SafeGainAdaptive>();
+  dg::python::exposeEntity<HolonomicConstraint>();
+  dg::python::exposeEntity<TaskSmithPredictor>()
+    .def("initialize", &TaskSmithPredictor::initialize)
+    .def("getPeriod", &TaskSmithPredictor::getPeriod)
+    .def("getDelay", &TaskSmithPredictor::getDelay)
+    ;
 }

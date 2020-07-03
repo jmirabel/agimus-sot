@@ -1,0 +1,60 @@
+#include "task-smith-predictor.hh"
+
+#include <dynamic-graph/factory.h>
+
+namespace dynamicgraph {
+namespace agimus {
+
+TaskSmithPredictor::TaskSmithPredictor(const std::string &n) : Task(n) {
+  taskSOUT.setFunction(boost::bind(
+      &TaskSmithPredictor::computeTaskExponentialDecrease, this, _1, _2));
+}
+
+sot::VectorMultiBound &TaskSmithPredictor::computeTaskExponentialDecrease(
+    sot::VectorMultiBound &errorRef, int time) {
+  const Vector &error = errorSOUT(time);
+  const double &gain = controlGainSIN(time);
+  errorRef.resize(error.size());
+
+  if (!initialized) {
+    for (std::size_t i = 0; i < inputMem.size(); ++i) {
+      inputMem[i] = Vector::Zero(error.size());
+      outputMem[i] = Vector::Zero(error.size());
+    }
+    initialized = true;
+  }
+
+  Vector output(gain * ((-error) - inputMem.back()) -
+                (gain * period - 1.) * outputMem.front() +
+                gain * period * outputMem.back());
+
+  for (unsigned int i = 0; i < errorRef.size(); ++i) errorRef[i] = output[i];
+
+  // Update memory
+  inputMem.push_front(-error);
+  outputMem.push_front(output);
+
+  /* TODO does this make sense ?
+   * It accounts for possible motions of the reference so it should be taken
+   * into accounts but how ?
+  if (withDerivative) {
+    const dynamicgraph::Vector &de = errorTimeDerivativeSOUT(time);
+    for (unsigned int i = 0; i < errorRef.size(); ++i)
+      errorRef[i] = errorRef[i].getSingleBound() - de(i);
+  } */
+
+  return errorRef;
+}
+
+void TaskSmithPredictor::initialize(double period, int delay) {
+  period = period;
+
+  inputMem.resize(delay);
+  outputMem.resize(delay);
+
+  initialized = false;
+}
+
+DYNAMICGRAPH_FACTORY_ENTITY_PLUGIN(TaskSmithPredictor, "TaskSmithPredictor");
+}  // namespace agimus
+}  // namespace dynamicgraph

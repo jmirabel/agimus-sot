@@ -25,6 +25,7 @@ ADD_LIBRARY(${LIBRARY_NAME}
   holonomic-constraint.cc
   delay.cc
   time.cc
+  task-smith-predictor.cc
   )
 target_link_libraries(${LIBRARY_NAME} PUBLIC sot-core::sot-core)
 INSTALL(TARGETS ${LIBRARY_NAME}
