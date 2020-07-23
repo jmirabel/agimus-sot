@@ -181,7 +181,7 @@ class Simulation (object):
         prefix = rospy.get_param ('tf_prefix', 'sim_')
         for o in self.objects:
             self.objectPublisher [o] = PublishObjectPose \
-                                       ('world', prefix+o+'/base_link')
+                                       ('world', prefix+o+("/table_link" if o == "table" else '/base_link'))
             self.objectPublisher [o].broadcast (self.objectPose [o])
 
             pose = self.objectPose [o]
