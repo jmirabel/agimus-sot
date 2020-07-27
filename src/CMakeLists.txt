@@ -71,6 +71,7 @@ ADD_LIBRARY(${LIBRARY_NAME}
   holonomic-constraint.cc
   delay.cc
   time.cc
+  task-smith-predictor.cc
   )
 
 PKG_CONFIG_USE_DEPENDENCY (${LIBRARY_NAME} dynamic-graph-python)
