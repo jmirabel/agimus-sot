@@ -30,11 +30,8 @@ sot::VectorMultiBound &TaskSmithPredictor::computeTaskExponentialDecrease(
     initialized = true;
   }
 
-  // Vector output(gain * ((-error) - inputMem.back()) -
-  //               (gain * period - 1.) * outputMem.front() +
-  //               gain * period * outputMem.back());
-  Vector output ((gain * ((-error) - inputMem.front())
-                + outputMem.front() + gain * period * outputMem.back()) / (1 + gain * period) );
+  Vector output (gain * ((-error) - inputMem.front())
+                + (1 - gain * period) * outputMem.front() + gain * period * outputMem.back());
 
   for (unsigned int i = 0; i < errorRef.size(); ++i) errorRef[i] = output[i];
 
@@ -57,8 +54,8 @@ sot::VectorMultiBound &TaskSmithPredictor::computeTaskExponentialDecrease(
 void TaskSmithPredictor::initialize(const double& T, const int& delay) {
   period = T;
 
-  inputMem.resize(delay);
-  outputMem.resize(delay);
+  inputMem.resize(delay+1);
+  outputMem.resize(delay+1);
 
   initialized = false;
 }
