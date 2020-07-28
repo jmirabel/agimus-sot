@@ -12,8 +12,8 @@ TaskSmithPredictor::TaskSmithPredictor(const std::string &n) : Task(n) {
       &TaskSmithPredictor::computeTaskExponentialDecrease, this, _1, _2));
 
   addCommand ("initialize", cmd::makeCommandVoid2(*this, &TaskSmithPredictor::initialize, ""));
-  addCommand ("getPeriod", cmd::makeCommandReturnType0(*this, &TaskSmithPredictor::getPeriod, ""));
-  addCommand ("getDelay", cmd::makeCommandReturnType0(*this, &TaskSmithPredictor::getDelay, ""));
+  //addCommand ("getPeriod", cmd::makeCommandReturnType0(*this, &TaskSmithPredictor::getPeriod, ""));
+  //addCommand ("getDelay", cmd::makeCommandReturnType0(*this, &TaskSmithPredictor::getDelay, ""));
 }
 
 sot::VectorMultiBound &TaskSmithPredictor::computeTaskExponentialDecrease(

@@ -176,8 +176,11 @@ class PreGrasp (Task):
 
     def _createTaskAndGain (self, name):
         # Create a task
-        self.task = SotTask (name + "_task")
+        from agimus_sot.sot import TaskSmithPredictor
+        self.task = TaskSmithPredictor (name + "_task")
+        #self.task = SotTask (name + "_task")
         self.task.add (self.feature.name)
+        self.task.initialize(0.01, 8)
 
         # Set the task gain
         self.gain = SafeGainAdaptive(name + "_gain")
