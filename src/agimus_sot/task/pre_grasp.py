@@ -122,7 +122,15 @@ class PreGrasp (Task):
             plug(sotrobot.dynamic.signal(linkName), poseSignal)
             print("Plug robot link: no measument for " + linkName)
         if Jsignal is not None:
-            plug(sotrobot.dynamic.signal("J"+linkName), Jsignal)
+            from dynamic_graph.sot.core.operator import Multiply_of_matrix
+            from dynamic_graph.sot.core.matrix_util import matrixToTuple
+            Jcleaned = Multiply_of_matrix("J"+linkName+"_cleaned")
+            S = np.eye(sotrobot.dynamic.getDimension())
+            S[6,6] = 0.
+            Jcleaned.sin1.value = matrixToTuple(S)
+            plug(sotrobot.dynamic.signal("J"+linkName), Jcleaned.sin0)
+            plug(Jcleaned.sout, Jsignal)
+            #plug(sotrobot.dynamic.signal("J"+linkName), Jsignal)
 
     ## Plug the position of linkName to \c outSignal.
     #  The pose of linkName is not computable by the SoT robot entity.
