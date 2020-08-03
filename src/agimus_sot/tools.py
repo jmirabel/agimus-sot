@@ -173,3 +173,13 @@ def entityIfMatrixHomo (name, condition, value_then, value_else, check=True):
         else:
             plug (condition, if_.condition)
     return if_
+
+def visualizeFeaturePose (featurePose, rosTfPublisher, baseTopicName):
+    for s in "ab":
+        omj = "oMj"+s
+        jmf = "j"+s+"Mf"+s
+        rosTfPublisher.add(baseTopicName + "/" + omj, "world", omj)
+        plug(featurePose.signal(omj), rosTfPublisher.signal(omj))
+
+        rosTfPublisher.add(baseTopicName + "/" + jmf, baseTopicName + "/" + omj, jmf)
+        plug(featurePose.signal(jmf), rosTfPublisher.signal(jmf))
