@@ -72,11 +72,13 @@ ADD_LIBRARY(${LIBRARY_NAME}
   delay.cc
   time.cc
   task-smith-predictor.cc
+  ros_tf_publisher.cpp
   )
 
 PKG_CONFIG_USE_DEPENDENCY (${LIBRARY_NAME} dynamic-graph-python)
 PKG_CONFIG_USE_DEPENDENCY (${LIBRARY_NAME} dynamic_graph_bridge)
 PKG_CONFIG_USE_DEPENDENCY (${LIBRARY_NAME} sot-core)
+PKG_CONFIG_USE_DEPENDENCY (${LIBRARY_NAME} tf2_ros)
 INSTALL(TARGETS ${LIBRARY_NAME}
   DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
   )
