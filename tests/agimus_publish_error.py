@@ -7,3 +7,11 @@ from dynamic_graph import plug
 plug(task.error, publish.error)
 robot.device.after.addSignal("ros_publish_values.trigger")
 
+
+import dynamic_graph as dg
+feature = dg.entity.Entity.entities["pregrasp___skin/hole___driller/drill_tip___based___gripper___driller/handle_feature"]
+import agimus_sot
+rosTfPub = agimus_sot.sot.RosTfPublisher("ros_tf_publisher")
+agimus_sot.tools.visualizeFeaturePose(feature, rosTfPub, "/sot/featurePose")
+robot.device.after.addSignal("ros_tf_publisher.trigger")
+
