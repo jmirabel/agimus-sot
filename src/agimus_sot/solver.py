@@ -42,6 +42,14 @@ class Solver(object):
         else:
             self.timer = None
 
+    def setLimits (self, robot):
+        if not self.sot.hasSignal("state"): return
+        m = robot.pinocchioModel
+        self.sot.setUpperLimits([10e20,] * 6 + m.upperPositionLimit[7:].tolist())
+        self.sot.setLowerLimits([-10e20,] * 6 + m.lowerPositionLimit[7:].tolist())
+        from dynamic_graph import plug
+        plug(robot.device.state, self.sot.state)
+
     def push (self, task):
         """
         task: an object of type agimus_sot.task.Task
